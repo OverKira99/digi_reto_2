@@ -2,6 +2,7 @@ import 'package:digi_reto_2/features/shop/display/providers/product_provider.dar
 import 'package:digi_reto_2/features/shop/display/widgets/product_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -22,9 +23,10 @@ class _ShopScreenState extends State<ShopScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final provider = context.watch<ProductProvider>();
+    final provider = context.watch<ProductProvider>();
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -76,31 +78,28 @@ class _ShopScreenState extends State<ShopScreen> {
         ),
         elevation: 0,
       ),
-      body: SizedBox(
-        child: Consumer<ProductProvider>(
-          builder: (context, provider, child) {
-            /* if (provider.products.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
-            }*/
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.55,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 5,
-                ),
-                itemCount: provider.products.length,
-                itemBuilder: (_, index) {
-                  return SizedBox(
-                    height: 400,
-                    child: ProductWidget(product: provider.products[index]),
-                  );
-                },
+      body: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Skeletonizer(
+            enabled: provider.isLoading,
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.55,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
               ),
-            );
-          },
+              itemCount: provider.products.length,
+              itemBuilder: (_, index) {
+                return SizedBox(
+                  height: 400,
+                  child: ProductWidget(product: provider.products[index]),
+                );
+              },
+            ),
+          ),
         ),
       ),
     );

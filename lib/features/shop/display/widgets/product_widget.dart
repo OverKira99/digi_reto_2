@@ -33,7 +33,7 @@ class ProductWidget extends StatelessWidget {
                 child: Image.asset(product.image, width: 100, height: 100),
               ),
               SizedBox(
-                width: 100,
+                width: 120,
                 child: Text(
                   product.name,
                   style: TextStyle(

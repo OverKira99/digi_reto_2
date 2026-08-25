@@ -1,5 +1,6 @@
 import 'package:digi_reto_2/features/shop/data/datasource/products_remote_datasource.dart';
 import 'package:digi_reto_2/features/shop/data/dto/product_dto.dart';
+import 'package:digi_reto_2/features/shop/data/models/add_product_cart_shop_model.dart';
 import 'package:digi_reto_2/features/shop/domain/entities/product_entity.dart';
 import 'package:digi_reto_2/features/shop/domain/repositories/product_repository.dart';
 
@@ -20,7 +21,9 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<void> saveProductCarShop(Product product) async {
-    return await _dataSource.saveProductCarShop(ProductDto.fromEntity(product));
+  Future<void> saveProductCarShop(ProductCartShopModel addproduct) async {
+    await _dataSource.saveProductCarShop(
+      ProductDto.fromEntity(addproduct.product),
+    );
   }
 }

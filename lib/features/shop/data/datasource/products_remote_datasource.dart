@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:digi_reto_2/features/shop/data/dto/product_dto.dart';
 
 abstract class ProductRemoteDataSource {
@@ -68,9 +70,6 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   @override
   Future<void> saveProductCarShop(ProductDto productDto) async {
     await Future.delayed(const Duration(seconds: 1));
-    if (productDto.product.name.trim().isEmpty) {
-      throw Exception('El nombre no puede estar vacío');
-    }
-    _mockDatabase.add(productDto.toMap());
+    final productJson = jsonEncode(productDto.toMap());
   }
 }
