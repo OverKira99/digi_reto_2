@@ -1,5 +1,6 @@
 import 'package:digi_reto_2/features/shop/display/providers/product_provider.dart';
 import 'package:digi_reto_2/features/shop/display/widgets/product_widget.dart';
+import 'package:digi_reto_2/features/shop/display/widgets/shop_car_up_menu_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -18,6 +19,7 @@ class _ShopScreenState extends State<ShopScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = context.read<ProductProvider>();
       provider.getProducts();
+      provider.getCartShop();
     });
   }
 
@@ -43,7 +45,14 @@ class _ShopScreenState extends State<ShopScreen> {
             Stack(
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => const ShopCarUpMenuWidget(),
+                    );
+                  },
                   child: Icon(
                     Icons.shopping_cart,
                     size: 32,
@@ -62,7 +71,7 @@ class _ShopScreenState extends State<ShopScreen> {
                     ),
                     child: Center(
                       child: Text(
-                        '0',
+                        provider.cartItems.length.toString(),
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,

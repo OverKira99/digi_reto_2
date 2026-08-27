@@ -1,5 +1,5 @@
-import 'package:digi_reto_2/features/shop/data/models/add_product_cart_shop_model.dart';
-import 'package:digi_reto_2/features/shop/domain/entities/product_entity.dart';
+import 'package:digi_reto_2/features/shop/domain/entities/cart_item.dart';
+import 'package:digi_reto_2/features/shop/domain/entities/product.dart';
 import 'package:digi_reto_2/features/shop/domain/usecases/product_use_cases.dart';
 import 'package:flutter/foundation.dart';
 
@@ -15,19 +15,20 @@ class ProductProvider extends ChangeNotifier {
   });
 
   List<Product> products = [];
+  List<CartItem> cartItems = [];
   bool isLoading = true;
 
-  Future<void> saveProductCarShop(Product product) async {
-    await _saveProductUseCase.saveProductCarShopUseCase(
-      addProduct: ProductCartShopModel(
-        product: product,
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-      ),
-    );
+  Future<void> getCartShop() async {
+    cartItems = (await _getProductsUseCase.getCartProductsUseCase());
     notifyListeners();
+  }
+
+  Future<void> saveProductCartShop(Product product) async {
+    await _saveProductUseCase.saveProductCartShopUseCase(
+      CartItem(product: product, quantity: 1),
+    );
+
+    await getCartShop();
   }
 
   Future<Product> getProduct(int id) async {

@@ -5,7 +5,6 @@ import 'package:digi_reto_2/features/shop/data/dto/product_dto.dart';
 abstract class ProductRemoteDataSource {
   Future<List<ProductDto>> getProducts();
   Future<ProductDto> getProduct(int id);
-  Future<void> saveProductCarShop(ProductDto product);
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -65,11 +64,5 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   Future<List<ProductDto>> getProducts() async {
     await Future.delayed(const Duration(milliseconds: 8000));
     return _mockDatabase.map((item) => ProductDto.fromMap(item)).toList();
-  }
-
-  @override
-  Future<void> saveProductCarShop(ProductDto productDto) async {
-    await Future.delayed(const Duration(seconds: 1));
-    final productJson = jsonEncode(productDto.toMap());
   }
 }

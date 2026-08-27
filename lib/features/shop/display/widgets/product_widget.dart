@@ -1,6 +1,6 @@
 import 'package:digi_reto_2/core/utils/ui_utils.dart';
 import 'package:digi_reto_2/features/shop/display/providers/product_provider.dart';
-import 'package:digi_reto_2/features/shop/domain/entities/product_entity.dart';
+import 'package:digi_reto_2/features/shop/domain/entities/product.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -60,7 +60,16 @@ class ProductWidget extends StatelessWidget {
             top: 10,
             right: 10,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () async {
+                await provider.saveProductCartShop(product);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Producto agregado al carrito: ${product.name}',
+                    ),
+                  ),
+                );
+              },
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(4),

@@ -1,12 +1,16 @@
+import 'dart:convert';
+
+import 'package:digi_reto_2/features/shop/data/datasource/products_local_datasource.dart';
 import 'package:digi_reto_2/features/shop/data/datasource/products_remote_datasource.dart';
-import 'package:digi_reto_2/features/shop/data/dto/product_dto.dart';
-import 'package:digi_reto_2/features/shop/data/models/add_product_cart_shop_model.dart';
-import 'package:digi_reto_2/features/shop/domain/entities/product_entity.dart';
+import 'package:digi_reto_2/features/shop/data/dto/cart_shop_dto.dart';
+import 'package:digi_reto_2/features/shop/domain/entities/cart_item.dart';
+import 'package:digi_reto_2/features/shop/domain/entities/product.dart';
 import 'package:digi_reto_2/features/shop/domain/repositories/product_repository.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
-  ProductRepositoryImpl(this._dataSource);
+  ProductRepositoryImpl(this._dataSource, this._productLocalDataSource);
   final ProductRemoteDataSource _dataSource;
+  final ProductLocalDataSource _productLocalDataSource;
 
   @override
   Future<List<Product>> getProducts() async {
@@ -21,9 +25,19 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<void> saveProductCarShop(ProductCartShopModel addproduct) async {
-    await _dataSource.saveProductCarShop(
-      ProductDto.fromEntity(addproduct.product),
+  Future<void> saveProductCarShop(CartItem cartItem) async {
+    await _productLocalDataSource.saveProductCarShop(
+      CartShopDto.fromEntity(cartItem),
     );
+  }
+
+  @override
+  Future<List<CartItem>> getProductCarShop() async {
+    final stringList = await _productLocalDataSource.getProductCarShop();
+
+    return stringList.map((itemString) {
+      final Map<String, dynamic> map = jsonDecode(itemString);
+      return CartShopDto.fromMap(map).toEntity();
+    }).toList();
   }
 }
